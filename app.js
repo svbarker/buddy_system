@@ -3,6 +3,8 @@ const app = express();
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const session = require("express-session");
+const methodOverride = require("method-override");
+const getPostSupport = require("express-method-override-get-post-support");
 const { User, List, ListItem } = require("./models");
 
 // Basic middleware
@@ -25,6 +27,8 @@ app.use(
 );
 
 app.use(express.static(__dirname + "/public"));
+
+app.use(methodOverride(getPostSupport.callback, getPostSupport.options));
 
 // Passport authentication
 
@@ -70,6 +74,7 @@ app.get("/", (req, res) => {
 				{ model: List, as: "buddyLists", include: [{ model: ListItem }] }
 			]
 		}).then(user => {
+			console.log(JSON.stringify(user, null, 2));
 			res.render("dashboard", { user });
 		});
 	} else {
@@ -105,6 +110,7 @@ app.post("/register", (req, res) => {
 });
 
 app.use("/lists", require("./routes/lists"));
+app.use("/lists/:listId/listitems", require("./routes/listitems"));
 
 app.listen(3000, () => {
 	console.log("Now listening...");

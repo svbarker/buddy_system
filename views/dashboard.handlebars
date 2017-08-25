@@ -6,7 +6,7 @@
 		<div>
 			<ul>
 			{{#each list.ListItems as |listItem|}}
-				<li>{{listItem.description}} | {{listItem.value}}</li>
+				<li {{#if listItem.checked}} class="checkedOff"{{/if}}>{{listItem.description}} | {{listItem.value}}</li>
 			{{/each}}
 			</ul>
 		</div>
@@ -25,7 +25,7 @@
 		<div>
 			<ul>
 			{{#each list.ListItems as |listItem|}}
-				<li>{{listItem.description}} | {{listItem.value}}</li>
+				<li {{#if listItem.checked}} class="checkedOff"{{/if}}>{{listItem.description}} | {{listItem.value}} <form action="/lists/{{list.id}}/listitems/{{listItem.id}}" method="POST"><input type="hidden" name="_method" value="PATCH"><button>Check Off</button></form></li>
 			{{/each}}
 			</ul>
 		</div>
