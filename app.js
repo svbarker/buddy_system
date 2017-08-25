@@ -24,7 +24,9 @@ app.use(
 	})
 );
 
-// Passport
+app.use(express.static(__dirname + "/public"));
+
+// Passport authentication
 
 const passport = require("passport");
 app.use(passport.initialize());
@@ -68,7 +70,6 @@ app.get("/", (req, res) => {
 				{ model: List, as: "buddyLists", include: [{ model: ListItem }] }
 			]
 		}).then(user => {
-			user = JSON.stringify(user, null, 2);
 			res.render("dashboard", { user });
 		});
 	} else {
@@ -102,6 +103,8 @@ app.post("/register", (req, res) => {
 		res.redirect("/login");
 	});
 });
+
+app.use("/lists", require("./routes/lists"));
 
 app.listen(3000, () => {
 	console.log("Now listening...");

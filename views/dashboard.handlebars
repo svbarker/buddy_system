@@ -1,5 +1,33 @@
 <h1>Welcome, {{user.username}}!</h1>
 
 <section>
-	<pre>{{user}}</pre>
+	<h2>Your To-Do Lists</h2>
+	{{#each user.ownedLists as |list|}}
+		<div>
+			<ul>
+			{{#each list.ListItems as |listItem|}}
+				<li>{{listItem.description}} | {{listItem.value}}</li>
+			{{/each}}
+			</ul>
+		</div>
+	{{/each}}
+
+	<div>
+		<form action="/lists/new" method="GET">
+			<button>New List</button>
+		</form>
+	</div>
+</section>
+
+<section>
+	<h2>Your Buddies' Lists</h2>
+	{{#each user.buddyLists as |list|}}
+		<div>
+			<ul>
+			{{#each list.ListItems as |listItem|}}
+				<li>{{listItem.description}} | {{listItem.value}}</li>
+			{{/each}}
+			</ul>
+		</div>
+	{{/each}}
 </section>
