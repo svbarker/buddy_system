@@ -2,8 +2,11 @@
 
 <p>Your site currency: {{user.currency}}</p>
 
-<section>
-	<h2>Your To-Do Lists</h2>
+<section class="panel panel-default">
+	<div class="panel-heading">
+		<h2>Your To-Do Lists</h2>
+	</div>
+	<div class="panel-body">
 	{{#each user.ownedLists as |list|}}
 		<div>
 			{{#if list.pending}}
@@ -11,40 +14,74 @@
 			{{else}}
 				<h3>Shared with: {{list.buddy.username}}</h3>
 			{{/if}}
-			<ul>
+			<ul class="list-group">
 			{{#each list.ListItems as |listItem|}}
-				<li {{#if listItem.checked}} class="checkedOff"{{/if}}>{{listItem.description}} | {{listItem.value}}</li>
+				<li class="list-group-item {{#if listItem.checked}}checkedOff{{/if}}">
+					<div class="row">
+						<div class="col-xs-2 col-sm-1">
+							<span class="label label-danger">{{listItem.value}}</span>
+						</div>
+						<div class="col-xs-10 col-sm-11">
+							{{listItem.description}}
+						</div>
+					</div>
+				</li>
 			{{/each}}
 			</ul>
 		</div>
 	{{/each}}
+	</div>
 
-	<div>
+	<div class="panel-footer">
 		<form action="/lists/new" method="GET">
-			<button>New List</button>
+			<button class="btn btn-primary">New List</button>
 		</form>
 	</div>
 </section>
 
-<section>
-	<h2>Your Buddies' Lists</h2>
+<section class="panel panel-default">
+	<div class="panel-heading">
+		<h2>Your Buddies' Lists</h2>
+	</div>
+	<div class="panel-body">
 	{{#each user.buddyLists as |list|}}
 		{{#if list.pending}}
 		{{else}}
 			<div>
 				<h3>List by: {{list.owner.username}}</h3>
-				<ul>
+				<ul class="list-group">
 				{{#each list.ListItems as |listItem|}}
-					<li {{#if listItem.checked}} class="checkedOff"{{/if}}>{{listItem.description}} | {{listItem.value}} <form action="/lists/{{list.id}}/listitems/{{listItem.id}}" method="POST"><input type="hidden" name="_method" value="PATCH"><button>Check Off</button></form></li>
+					<li class="list-group-item {{#if listItem.checked}}checkedOff{{/if}}">
+						<div class="row">
+							<div class="col-xs-3 col-sm-1">
+								<span class="label label-danger">{{listItem.value}}</span>
+							</div>
+							<div class="col-xs-6 col-sm-9">
+								{{listItem.description}}
+							</div>
+							<div class="col-xs-3 col-sm-1">
+								<form action="/lists/{{list.id}}/listitems/{{listItem.id}}" method="POST">
+									<input type="hidden" name="_method" value="PATCH">
+									<button class="btn btn-default">Check Off</button>
+								</form>
+						</div>
+						</div>
+						
+					</li>
+					
 				{{/each}}
 				</ul>
 			</div>
 		{{/if}}
 	{{/each}}
+	</div>
 </section>
 
-<section>
-	<h2>List Requests</h2>
+<section class="panel panel-default">
+	<div class="panel-heading">
+		<h2>List Requests</h2>
+	</div>
+	<div class="panel-body">
 	{{#each user.buddyLists as |list|}}
 		{{#if list.pending}}
 			<div>
@@ -55,13 +92,17 @@
 				<form action="/lists/{{list.id}}/reject" method="POST">
 					<button>Reject</button>
 				</form>
-				<ul>
+				<ul class="list-group">
 				{{#each list.ListItems as |listItem|}}
-					<li {{#if listItem.checked}} class="checkedOff"{{/if}}>{{listItem.description}} | {{listItem.value}}</li>
+					<li class="list-group-item
+					{{#if listItem.checked}}checkedOff{{/if}}">
+						{{listItem.description}} | {{listItem.value}}
+					</li>
 				{{/each}}
 				</ul>
 			</div>
 		{{else}}	
 		{{/if}}
 	{{/each}}
+	</div>
 </section>

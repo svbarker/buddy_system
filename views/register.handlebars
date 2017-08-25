@@ -1,5 +1,22 @@
-<form action="/register" method="post">
-	<input type="text" name="username">
-	<input type="password" name="password">
-	<button>Sign Up!</button>
-</form>
+<div class="row">
+	<div class="col-sm-6 col-sm-offset-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<form action="/register" method="post">
+					<div class="form-group">
+						<label for="username">Username</label>
+						<input type="text" name="username" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" name="password" class="form-control">
+					</div>
+					<button class="btn btn-primary">Sign Up!</button>
+				</form>
+			</div>
+			<div class="panel-footer">
+				<a href="/login">Or log in</a>
+			</div>
+		</div>
+	</div>
+</div>

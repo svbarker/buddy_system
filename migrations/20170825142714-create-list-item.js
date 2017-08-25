@@ -9,15 +9,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       listId: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       description: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       checked: {
         type: Sequelize.BOOLEAN
       },
       value: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       createdAt: {

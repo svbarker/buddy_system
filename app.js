@@ -125,7 +125,8 @@ app.post(
 app.post("/register", loggedOutOnly, (req, res) => {
 	const params = {
 		username: req.body.username,
-		password: req.body.password
+		password: req.body.password,
+		currency: 0
 	};
 	User.create(params).then(user => {
 		res.redirect("/login");

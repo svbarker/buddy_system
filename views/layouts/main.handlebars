@@ -11,12 +11,22 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
-	<div>
-		<h1>The Buddy System</h1>
-		{{if user}}
-			<form action="/logout" method="POST"><input type="hidden" name="_method" value="DELETE"><button>Log Out</button></form>
-		{{/if}}
-	</div>
+	<nav class="nav navbar-inverse">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<a href="/" class="navbar-brand">The Buddy System</a>
+				</div>
+				{{#if user}}
+				<div class="col-md-2 col-md-offset-4">
+					<form action="/logout" method="POST" class="form-inline">
+						<input type="hidden" name="_method" value="DELETE">
+						<button class="btn btn-default">Log Out</button></form>
+				{{/if}}
+				</div>
+			</div>
+		</div>
+	</nav>
 	<main class="container">
 		{{{body}}}
 	</main>
