@@ -1,28 +1,35 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
-const { User, List, ListItem } = require("./../models");
+const { User, List, ListItem, sequelize } = require("./../models");
 
 router.patch("/:itemId", (req, res) => {
 	let value;
-	ListItem.update(
-		{ checked: true },
-		{ where: { id: req.params.itemId }, returning: true }
-	)
-		.then(listItem => {
-			value = listItem[1][0].value;
-			return List.find({
-				where: { id: req.params.listId }
+	sequelize.transaction(t => {
+		return ListItem.update(
+			{ checked: true },
+			{ where: { id: req.params.itemId }, returning: true, transaction: t }
+		)
+			.then(listItem => {
+				value = listItem[1][0].value;
+				return List.find({
+					where: { id: req.params.listId },
+					transaction: t
+				});
+			})
+			.then(list => {
+				return User.increment("currency", {
+					by: value,
+					where: { id: list.ownerId },
+					transaction: t
+				});
+			})
+			.then(user => {
+				res.redirect("/");
+			})
+			.catch(e => {
+				req.flash("danger", e.message);
 			});
-		})
-		.then(list => {
-			return User.increment("currency", {
-				by: value,
-				where: { id: list.ownerId }
-			});
-		})
-		.then(user => {
-			res.redirect("/");
-		});
+	});
 });
 
 module.exports = router;

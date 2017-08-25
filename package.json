@@ -20,8 +20,10 @@
   "dependencies": {
     "bcrypt": "^1.0.3",
     "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
     "dotenv": "^4.0.0",
     "express": "^4.15.4",
+    "express-flash": "0.0.2",
     "express-handlebars": "^3.0.0",
     "express-method-override-get-post-support": "0.0.7",
     "method-override": "^2.3.9"

@@ -1,5 +1,5 @@
-.checkedOff {
-	text-decoration: line-through;
+li.checkedOff {
+	background-color: #eee;
 }
 
 .label {

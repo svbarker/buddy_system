@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
+const flash = require("express-flash");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const methodOverride = require("method-override");
 const getPostSupport = require("express-method-override-get-post-support");
@@ -9,7 +11,11 @@ const { User, List, ListItem } = require("./models");
 
 // Basic middleware
 
+app.use(flash());
+
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(cookieParser());
 
 const hbs = exphbs.create({
 	partialsDir: "views/partials",
@@ -64,7 +70,7 @@ passport.deserializeUser(function(id, done) {
 	});
 });
 
-// middleware for protecting routes
+// middleware for protecting routes and validating forms
 
 const loggedInOnly = (req, res, next) => {
 	console.log(req.user);
@@ -80,6 +86,17 @@ const loggedOutOnly = (req, res, next) => {
 		next();
 	} else {
 		res.redirect("/");
+	}
+};
+
+const formValid = (req, res, next) => {
+	console.log(req.body);
+	if (req.body.username && req.body.password) {
+		console.log("I satisfied the if!");
+		next();
+	} else {
+		req.flash("danger", "All form fields are required.");
+		res.redirect("back");
 	}
 };
 
@@ -99,9 +116,13 @@ app.get("/", loggedInOnly, (req, res) => {
 				include: [{ model: ListItem }, { model: User, as: "owner" }]
 			}
 		]
-	}).then(user => {
-		res.render("dashboard", { user });
-	});
+	})
+		.then(user => {
+			res.render("dashboard", { user });
+		})
+		.catch(e => {
+			req.flash(e.message);
+		});
 });
 
 app.get("/login", loggedOutOnly, (req, res) => {
@@ -114,7 +135,7 @@ app.get("/register", loggedOutOnly, (req, res) => {
 
 app.post(
 	"/login",
-	loggedOutOnly,
+	[loggedOutOnly, formValid],
 	passport.authenticate("local", {
 		successRedirect: "/",
 		failureRedirect: "/login",
@@ -122,7 +143,7 @@ app.post(
 	})
 );
 
-app.post("/register", loggedOutOnly, (req, res) => {
+app.post("/register", [loggedOutOnly, formValid], (req, res) => {
 	const params = {
 		username: req.body.username,
 		password: req.body.password,

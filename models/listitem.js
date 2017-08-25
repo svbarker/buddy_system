@@ -4,9 +4,23 @@ const models = require("./");
 module.exports = function(sequelize, DataTypes) {
   var ListItem = sequelize.define("ListItem", {
     listId: DataTypes.INTEGER,
-    description: DataTypes.STRING,
+    description: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "You must provide a description for the task"
+        }
+      }
+    },
     checked: DataTypes.BOOLEAN,
-    value: DataTypes.INTEGER
+    value: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: "You must provide a point value for the task"
+        }
+      }
+    }
   });
 
   ListItem.associate = function(models) {

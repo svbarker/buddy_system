@@ -1,5 +1,7 @@
-# jul-furry-winner
+Stephanie Barker
 
-Hackaton End of Week 6. GET CRAZY CODING!
+You need to have a postgresql server running. Create a .env file in the root folder with USERNAME and PASSWORD keys for your postgres server.
 
-**IMPORTANT: Modify this file to add description to how we will start/use your app.**
+Run npm i.
+
+Navigate to localhost:3000

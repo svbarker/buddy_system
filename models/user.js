@@ -4,13 +4,29 @@ const models = require("./");
 ("use strict");
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define("User", {
-    username: DataTypes.STRING,
-    password: DataTypes.STRING,
+    username: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "Username field is required"
+        },
+        isAlphanumeric: {
+          msg: "Username may only contain letters and numbers"
+        }
+      }
+    },
+    password: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "Password field is required"
+        }
+      }
+    },
     currency: DataTypes.INTEGER
   });
 
   User.beforeCreate(user => {
-    console.log("This is at least running...");
     user.password = bcrypt.hashSync(user.password, 12);
   });
 
