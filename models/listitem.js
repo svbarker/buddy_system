@@ -12,5 +12,6 @@ module.exports = function(sequelize, DataTypes) {
   ListItem.associate = function(models) {
     ListItem.belongsTo(models.List, { foreignKey: "listId" });
   };
+
   return ListItem;
 };

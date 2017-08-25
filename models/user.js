@@ -23,11 +23,8 @@ module.exports = function(sequelize, DataTypes) {
   // };
 
   User.associate = function(models) {
-    User.hasMany(models.List, { foreignKey: "ownerId" });
-  };
-
-  User.associate = function(models) {
-    User.hasMany(models.List, { foreignKey: "buddyId" });
+    User.hasMany(models.List, { foreignKey: "ownerId", as: "ownedLists" });
+    User.hasMany(models.List, { foreignKey: "buddyId", as: "buddyLists" });
   };
 
   return User;

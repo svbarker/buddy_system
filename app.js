@@ -35,7 +35,9 @@ const LocalStrategy = require("passport-local").Strategy;
 passport.use(
 	new LocalStrategy(function(username, password, done) {
 		User.find({
-			where: { username: username }
+			where: {
+				username: username
+			}
 		}).then(user => {
 			console.log(user);
 			if (!user || !user.validatePassword(password)) {
@@ -61,7 +63,10 @@ passport.deserializeUser(function(id, done) {
 app.get("/", (req, res) => {
 	if (req.user) {
 		User.findById(req.user.id, {
-			include: [{ model: List, include: [{ model: ListItem }] }]
+			include: [
+				{ model: List, as: "ownedLists", include: [{ model: ListItem }] },
+				{ model: List, as: "buddyLists", include: [{ model: ListItem }] }
+			]
 		}).then(user => {
 			user = JSON.stringify(user, null, 2);
 			res.render("dashboard", { user });

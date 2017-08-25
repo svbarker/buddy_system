@@ -8,14 +8,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   List.associate = function(models) {
-    List.belongsTo(models.User, { foreignKey: "ownerId" });
-  };
-
-  List.associate = function(models) {
-    List.belongsTo(models.User, { foreignKey: "buddyId" });
-  };
-
-  List.associate = function(models) {
+    List.belongsTo(models.User, { foreignKey: "ownerId", as: "ownedLists" });
+    List.belongsTo(models.User, { foreignKey: "buddyId", as: "buddyLists" });
     List.hasMany(models.ListItem, { foreignKey: "listId" });
   };
 
