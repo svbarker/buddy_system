@@ -6,15 +6,16 @@
 	<h2>Your To-Do Lists</h2>
 	{{#each user.ownedLists as |list|}}
 		<div>
-			<h3>Shared with: {{list.buddy.username}}</h3>
+			{{#if list.pending}}
+				<h3>Shared with: <a href="/lists/{{list.id}}/send">Send this list to a buddy</a></h3>
+			{{else}}
+				<h3>Shared with: {{list.buddy.username}}</h3>
+			{{/if}}
 			<ul>
 			{{#each list.ListItems as |listItem|}}
 				<li {{#if listItem.checked}} class="checkedOff"{{/if}}>{{listItem.description}} | {{listItem.value}}</li>
 			{{/each}}
 			</ul>
-			{{#if list.pending}}
-				<a href="/lists/:id/send">Send this list to a buddy</a>
-			{{/if}}
 		</div>
 	{{/each}}
 
@@ -28,13 +29,39 @@
 <section>
 	<h2>Your Buddies' Lists</h2>
 	{{#each user.buddyLists as |list|}}
-		<div>
-			<h3>List by: {{list.owner.username}}</h3>
-			<ul>
-			{{#each list.ListItems as |listItem|}}
-				<li {{#if listItem.checked}} class="checkedOff"{{/if}}>{{listItem.description}} | {{listItem.value}} <form action="/lists/{{list.id}}/listitems/{{listItem.id}}" method="POST"><input type="hidden" name="_method" value="PATCH"><button>Check Off</button></form></li>
-			{{/each}}
-			</ul>
-		</div>
+		{{#if list.pending}}
+		{{else}}
+			<div>
+				<h3>List by: {{list.owner.username}}</h3>
+				<ul>
+				{{#each list.ListItems as |listItem|}}
+					<li {{#if listItem.checked}} class="checkedOff"{{/if}}>{{listItem.description}} | {{listItem.value}} <form action="/lists/{{list.id}}/listitems/{{listItem.id}}" method="POST"><input type="hidden" name="_method" value="PATCH"><button>Check Off</button></form></li>
+				{{/each}}
+				</ul>
+			</div>
+		{{/if}}
+	{{/each}}
+</section>
+
+<section>
+	<h2>List Requests</h2>
+	{{#each user.buddyLists as |list|}}
+		{{#if list.pending}}
+			<div>
+				<h3>List by: {{list.owner.username}}</h3>
+				<form action="/lists/{{list.id}}/approve" method="POST">
+					<input type="hidden" name="_method" value="PATCH">
+					<button>Accept</button>
+				<form action="/lists/{{list.id}}/reject" method="POST">
+					<button>Reject</button>
+				</form>
+				<ul>
+				{{#each list.ListItems as |listItem|}}
+					<li {{#if listItem.checked}} class="checkedOff"{{/if}}>{{listItem.description}} | {{listItem.value}}</li>
+				{{/each}}
+				</ul>
+			</div>
+		{{else}}	
+		{{/if}}
 	{{/each}}
 </section>

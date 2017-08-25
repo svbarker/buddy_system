@@ -1,1 +1,14 @@
-//display buddies
+<h2>Pick someone to send your list to:</h2>
+
+<ul>
+	{{#each users as |user|}}
+		<li>{{user.username}} 
+			<form action="/lists/send" method="POST">
+				<input type="hidden" name="_method" value="PATCH">
+				<input type="hidden" name="user" value="{{user.id}}">
+				<input type="hidden" name="list" value="{{../listId}}">
+				<button>Send</button>
+			</form>
+		</li>
+	{{/each}}
+</ul>

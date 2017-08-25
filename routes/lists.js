@@ -8,7 +8,7 @@ router.get("/new", (req, res) => {
 
 router.post("/", (req, res) => {
 	//should do a transaction here
-	List.create({ ownerId: req.user.id, pending: true })
+	List.create({ ownerId: req.user.id, pending: true, complete: false })
 		.then(list => {
 			const listItems = req.body.listItems.map(item => {
 				return ListItem.create({
@@ -27,8 +27,23 @@ router.post("/", (req, res) => {
 });
 
 router.get("/:id/send", (req, res) => {
-	User.findAll({}).then(users => {
-		res.render("./lists/sendList", users);
+	User.findAll({ where: { id: { $ne: req.user.id } } }).then(users => {
+		res.render("./lists/sendList", { users: users, listId: req.params.id });
+	});
+});
+
+router.patch("/send", (req, res) => {
+	List.update(
+		{ buddyId: req.body.user },
+		{ where: { id: req.body.list } }
+	).then(() => {
+		res.redirect("/");
+	});
+});
+
+router.patch("/:id/approve", (req, res) => {
+	List.update({ pending: false }, { where: { id: req.params.id } }).then(() => {
+		res.redirect("/");
 	});
 });
 

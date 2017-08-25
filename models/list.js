@@ -4,7 +4,9 @@ const models = require("./");
 module.exports = function(sequelize, DataTypes) {
   var List = sequelize.define("List", {
     ownerId: DataTypes.INTEGER,
-    buddyId: DataTypes.INTEGER
+    buddyId: DataTypes.INTEGER,
+    pending: DataTypes.BOOLEAN,
+    complete: DataTypes.BOOLEAN
   });
 
   List.associate = function(models) {

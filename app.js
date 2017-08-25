@@ -64,41 +64,57 @@ passport.deserializeUser(function(id, done) {
 	});
 });
 
-//routes
+// middleware for protecting routes
 
-app.get("/", (req, res) => {
+const loggedInOnly = (req, res, next) => {
+	console.log(req.user);
 	if (req.user) {
-		User.findById(req.user.id, {
-			include: [
-				{
-					model: List,
-					as: "ownedLists",
-					include: [{ model: ListItem }, { model: User, as: "buddy" }]
-				},
-				{
-					model: List,
-					as: "buddyLists",
-					include: [{ model: ListItem }, { model: User, as: "owner" }]
-				}
-			]
-		}).then(user => {
-			res.render("dashboard", { user });
-		});
+		next();
 	} else {
-		res.render("login");
+		res.redirect("/login");
 	}
+};
+
+const loggedOutOnly = (req, res, next) => {
+	if (!req.user) {
+		next();
+	} else {
+		res.redirect("/");
+	}
+};
+
+// Login/register/logout routes
+
+app.get("/", loggedInOnly, (req, res) => {
+	User.findById(req.user.id, {
+		include: [
+			{
+				model: List,
+				as: "ownedLists",
+				include: [{ model: ListItem }, { model: User, as: "buddy" }]
+			},
+			{
+				model: List,
+				as: "buddyLists",
+				include: [{ model: ListItem }, { model: User, as: "owner" }]
+			}
+		]
+	}).then(user => {
+		res.render("dashboard", { user });
+	});
 });
 
-app.get("/login", (req, res) => {
+app.get("/login", loggedOutOnly, (req, res) => {
 	res.render("login");
 });
 
-app.get("/register", (req, res) => {
+app.get("/register", loggedOutOnly, (req, res) => {
 	res.render("register");
 });
 
 app.post(
 	"/login",
+	loggedOutOnly,
 	passport.authenticate("local", {
 		successRedirect: "/",
 		failureRedirect: "/login",
@@ -106,7 +122,7 @@ app.post(
 	})
 );
 
-app.post("/register", (req, res) => {
+app.post("/register", loggedOutOnly, (req, res) => {
 	const params = {
 		username: req.body.username,
 		password: req.body.password
@@ -116,8 +132,22 @@ app.post("/register", (req, res) => {
 	});
 });
 
-app.use("/lists", require("./routes/lists"));
-app.use("/lists/:listId/listitems", require("./routes/listitems"));
+app.delete("/logout", loggedInOnly, (req, res) => {
+	req.logout();
+	req.method = "GET";
+	res.redirect("/login");
+});
+
+// Routes
+
+app.use("/lists", loggedInOnly, require("./routes/lists"));
+app.use(
+	"/lists/:listId/listitems",
+	loggedInOnly,
+	require("./routes/listitems")
+);
+
+// Start server
 
 app.listen(3000, () => {
 	console.log("Now listening...");
