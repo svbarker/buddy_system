@@ -70,11 +70,18 @@ app.get("/", (req, res) => {
 	if (req.user) {
 		User.findById(req.user.id, {
 			include: [
-				{ model: List, as: "ownedLists", include: [{ model: ListItem }] },
-				{ model: List, as: "buddyLists", include: [{ model: ListItem }] }
+				{
+					model: List,
+					as: "ownedLists",
+					include: [{ model: ListItem }, { model: User, as: "buddy" }]
+				},
+				{
+					model: List,
+					as: "buddyLists",
+					include: [{ model: ListItem }, { model: User, as: "owner" }]
+				}
 			]
 		}).then(user => {
-			console.log(JSON.stringify(user, null, 2));
 			res.render("dashboard", { user });
 		});
 	} else {

@@ -1,14 +1,20 @@
 <h1>Welcome, {{user.username}}!</h1>
 
+<p>Your site currency: {{user.currency}}</p>
+
 <section>
 	<h2>Your To-Do Lists</h2>
 	{{#each user.ownedLists as |list|}}
 		<div>
+			<h3>Shared with: {{list.buddy.username}}</h3>
 			<ul>
 			{{#each list.ListItems as |listItem|}}
 				<li {{#if listItem.checked}} class="checkedOff"{{/if}}>{{listItem.description}} | {{listItem.value}}</li>
 			{{/each}}
 			</ul>
+			{{#if list.pending}}
+				<a href="/lists/:id/send">Send this list to a buddy</a>
+			{{/if}}
 		</div>
 	{{/each}}
 
@@ -23,6 +29,7 @@
 	<h2>Your Buddies' Lists</h2>
 	{{#each user.buddyLists as |list|}}
 		<div>
+			<h3>List by: {{list.owner.username}}</h3>
 			<ul>
 			{{#each list.ListItems as |listItem|}}
 				<li {{#if listItem.checked}} class="checkedOff"{{/if}}>{{listItem.description}} | {{listItem.value}} <form action="/lists/{{list.id}}/listitems/{{listItem.id}}" method="POST"><input type="hidden" name="_method" value="PATCH"><button>Check Off</button></form></li>
