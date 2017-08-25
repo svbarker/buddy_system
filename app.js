@@ -149,9 +149,14 @@ app.post("/register", [loggedOutOnly, formValid], (req, res) => {
 		password: req.body.password,
 		currency: 0
 	};
-	User.create(params).then(user => {
-		res.redirect("/login");
-	});
+	User.create(params)
+		.then(user => {
+			res.redirect("/login");
+		})
+		.catch(e => {
+			req.flash("danger", e.message);
+			res.redirect("back");
+		});
 });
 
 app.delete("/logout", loggedInOnly, (req, res) => {

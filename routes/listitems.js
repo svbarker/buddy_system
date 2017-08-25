@@ -28,6 +28,7 @@ router.patch("/:itemId", (req, res) => {
 			})
 			.catch(e => {
 				req.flash("danger", e.message);
+				res.redirect("back");
 			});
 	});
 });

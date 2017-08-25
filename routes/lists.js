@@ -49,6 +49,7 @@ router.post("/", listFormValid, (req, res) => {
 			})
 			.catch(e => {
 				req.flash("danger", e.message);
+				res.redirect("back");
 			});
 	});
 });
@@ -66,6 +67,7 @@ router.patch("/send", (req, res) => {
 		})
 		.catch(e => {
 			req.flash("danger", e.message);
+			res.redirect("back");
 		});
 });
 
@@ -76,6 +78,7 @@ router.patch("/:id/approve", (req, res) => {
 		})
 		.catch(e => {
 			req.flash("danger", e.message);
+			res.redirect("back");
 		});
 });
 
