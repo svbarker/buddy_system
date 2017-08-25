@@ -75,6 +75,10 @@ app.get("/login", (req, res) => {
 	res.render("login");
 });
 
+app.get("/register", (req, res) => {
+	res.render("register");
+});
+
 app.post(
 	"/login",
 	passport.authenticate("local", {
@@ -83,6 +87,16 @@ app.post(
 		failureFlash: true
 	})
 );
+
+app.post("/register", (req, res) => {
+	const params = {
+		username: req.body.username,
+		password: req.body.password
+	};
+	User.create(params).then(user => {
+		res.redirect("/login");
+	});
+});
 
 app.listen(3000, () => {
 	console.log("Now listening...");

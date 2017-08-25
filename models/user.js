@@ -9,9 +9,10 @@ module.exports = function(sequelize, DataTypes) {
     currency: DataTypes.INTEGER
   });
 
-  User.beforeCreate = function(user) {
+  User.beforeCreate(user => {
+    console.log("This is at least running...");
     user.password = bcrypt.hashSync(user.password, 12);
-  };
+  });
 
   User.prototype.validatePassword = function(password) {
     return bcrypt.compareSync(password, this.password);
