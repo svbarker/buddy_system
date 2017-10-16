@@ -6,8 +6,7 @@
   "scripts": {
     "start": "npm run seed && node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "seed":
-      "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all"
+    "seed": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
@@ -34,6 +33,7 @@
     "passport-local": "^1.0.0",
     "pg": "^7.3.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.13.17"
+    "sequelize": "^4.13.17",
+    "sequelize-cli": "^3.0.0"
   }
 }
