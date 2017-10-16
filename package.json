@@ -4,8 +4,10 @@
   "description": "Hackaton End of Week 6. GET CRAZY CODING!",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "seed": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all"
+    "seed":
+      "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
